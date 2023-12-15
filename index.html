@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FGW14W-IP</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <style type="text/css">
+        body{font-family: 'Montserrat', sans-serif;}
+        .form_label{color: #262953;font-weight: 500;}
+        span.time_box_time {padding: 0 4rem;}
+        .time_box,.status_box,.form-select{background: #262953;padding: 10px 30px;color: #fff;border-radius: 10px;font-size: 1.5rem;font-weight: 600;}
+        span.status_round.status_active {width: 20px;height: 20px;display: inline-block;background: #00ff00;border-radius: 50%;margin: 3px  0 -3px 10px;}
+        .info_box {background: #262953;padding: 30px;border-radius: 10px;color: #fff;}
+        h6.info_text {color: #06D0FF;font-weight: 600;}
+        h3.info_title {font-weight: 700;}
+        .canvas {margin-top: 50px;}
+        select#exampleDropdown {appearance: none;background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23ffffff%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23ffffff%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");background-repeat: no-repeat;background-position: right 1rem center;background-size: 1em;}
+        @media (max-width: 768px){.time_box span {display: block;margin: 5px 0;padding: 0;}}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Your content goes here -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="fw-bold">FGW14W-IP</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="exampleDropdown" class="form_label">Product Name</label>
+                <select class="form-select" id="exampleDropdown" aria-label="Select Zähler">
+                    <option selected>Select an option</option>
+                    <option value="Zähler1">Zähler 1</option>
+                    <option value="Zähler2">Zähler 2</option>
+                    <option value="Zähler3">Zähler 3</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="LastUpdate" class="form_label">Last Update</label>
+                <div class="time_box"><span class="time_box_date">14-12-2023</span><span class="time_box_time">09:49:14</span><span class="time_box_zone">+01:00</span></div>
+            </div>
+            <div class="col-md-3">
+                <label for="Status" class="form_label">Status</label>
+                <div class="status_box">verbunden<span class="status_round status_active"></span></div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">Watt aktuell</h3>
+                    <h6 class="info_text">775</h6>
+                    <canvas id="wattaktuell" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">15 Min (kWh)</h3>
+                    <h6 class="info_text">0.7</h6>
+                    <canvas id="15minkWh" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">Stunde (kWh)</h3>
+                    <h6 class="info_text">0.7</h6>
+                    <canvas id="stundekWh" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">Tag (kWh)</h3>
+                    <h6 class="info_text">0.8</h6>
+                    <canvas id="tagkWh" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">Woche (kWh)</h3>
+                    <h6 class="info_text">0.8</h6>
+                    <canvas id="wochekWh" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">Monat (kWh)</h3>
+                    <h6 class="info_text">0.8</h6>
+                    <canvas id="monatkWh" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">Jahr (kWh)</h3>
+                    <h6 class="info_text">0.8</h6>
+                    <canvas id="jahrkWh" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="info_box">
+                    <h3 class="info_title">Gesamt (kWh)</h3>
+                    <h6 class="info_text">29.2</h6>
+                    <canvas id="gesamtkWh" class="canvas" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Include Bootstrap JS and Popper.js (required for some Bootstrap components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        var wattaktuelldata = {
+            labels: ['Watt aktuell'],
+            datasets: [{
+                label: 'Watt aktuell',
+                backgroundColor: '#ffffff',
+                borderColor: '#ffffff',
+                color: '#ffffff',
+                barThickness: 15,
+                maxBarThickness: 15,
+                data: [775]
+            }]
+        };
+        var wattaktuellconfig = {
+            type: 'bar',
+            data: wattaktuelldata,
+            options: {
+                color: [
+                    '#ffffff', 
+                ],
+                scales: {
+                    y: {
+                        ticks: {
+                            color : '#ffffff'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color : '#ffffff'
+                        }
+                    }
+                },
+            }
+        };
+        var wattaktuell = new Chart(document.getElementById('wattaktuell'), wattaktuellconfig);
+    </script>
+
+    <script>
+        var minkWhdata = {
+            labels: ['5 Min' , '10 Min', '15 Min' , '20 Min', '25 Min'],
+            datasets: [{
+                label: '15 Min (kWh)',
+                backgroundColor: '#ffffff',
+                borderColor: '#ffffff',
+                color: '#ffffff',
+                barThickness: 15,
+                maxBarThickness: 15,
+                data: [ 0.4, 0.7, 0.9 , 0.7]
+            }]
+        };
+        var minkWhconfig = {
+            type: 'bar',
+            data: minkWhdata,
+            options: {
+                color: [
+                    '#ffffff', 
+                ],
+                scales: {
+                    y: {
+                        ticks: {
+                            color : '#ffffff'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color : '#ffffff'
+                        }
+                    }
+                },
+            }
+        };
+        var minkWh = new Chart(document.getElementById('15minkWh'), minkWhconfig);
+    </script>
+
+    <script>
+        var stundekWhdata = {
+            labels: ['Stunde (kWh)'],
+            datasets: [{
+                data: [70, 30],
+                backgroundColor: [
+                    '#ffffff', // 80% fill color
+                    'rgba(255, 255, 255, 0.0)', // unfilled color
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.0)',
+                hoverOffset: 4 // add some space on hover
+            }]
+        };
+        var stundekWhconfig = {
+            type: 'doughnut',
+            data: stundekWhdata,
+            options: {
+                cutout: '80%',
+                color: [
+                    '#ffffff', 
+                ],
+            }
+        };
+        var stundekWh = new Chart(document.getElementById('stundekWh'), stundekWhconfig);
+    </script>
+
+    <script>
+        var tagkWhdata = {
+            labels: ['Tag (kWh)'],
+            datasets: [{
+                data: [80, 20],
+                backgroundColor: [
+                    '#06D0FF', // 80% fill color
+                    'rgba(255, 255, 255, 0.0)', // unfilled color
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.0)',
+                hoverOffset: 4 // add some space on hover
+            }]
+        };
+        var tagkWhconfig = {
+            type: 'doughnut',
+            data: tagkWhdata,
+            options: {
+                cutout: '80%',
+                color: [
+                    '#ffffff', 
+                ],
+            }
+        };
+        var tagkWh = new Chart(document.getElementById('tagkWh'), tagkWhconfig);
+    </script>
+
+    <script>
+        var wochekWhdata = {
+            labels: ['Woche (kWh)'],
+            datasets: [{
+                data: [80, 20],
+                backgroundColor: [
+                    '#06D0FF', // 80% fill color
+                    'rgba(255, 255, 255, 0.0)', // unfilled color
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.0)',
+                hoverOffset: 4 // add some space on hover
+            }]
+        };
+        var wochekWhconfig = {
+            type: 'pie',
+            data: wochekWhdata,
+            options: {
+                color: [
+                    '#ffffff', 
+                ],
+            }
+        };
+        var wochekWh = new Chart(document.getElementById('wochekWh'), wochekWhconfig);
+    </script>
+
+    <script>
+        var monatkWhdata = {
+            labels: ['Woche (kWh)'],
+            datasets: [{
+                data: [80, 20],
+                backgroundColor: [
+                    '#FFFFFF', // 80% fill color
+                    'rgba(255, 255, 255, 0.0)', // unfilled color
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.0)',
+                hoverOffset: 4 // add some space on hover
+            }]
+        };
+        var monatkWhconfig = {
+            type: 'pie',
+            data: monatkWhdata,
+            options: {
+                color: [
+                    '#ffffff', 
+                ],
+            }
+        };
+        var monatkWh = new Chart(document.getElementById('monatkWh'), monatkWhconfig);
+    </script>
+
+    <script>
+        var jahrkWhdata = {
+            labels: ['Tag (kWh)'],
+            datasets: [{
+                data: [80, 20],
+                backgroundColor: [
+                    '#06D0FF', // 80% fill color
+                    'rgba(255, 255, 255, 0.0)', // unfilled color
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.0)',
+                hoverOffset: 4 // add some space on hover
+            }]
+        };
+        var jahrkWhconfig = {
+            type: 'doughnut',
+            data: jahrkWhdata,
+            options: {
+                cutout: '80%',
+                color: [
+                    '#ffffff', 
+                ],
+            }
+        };
+        var jahrkWh = new Chart(document.getElementById('jahrkWh'), jahrkWhconfig);
+    </script>
+
+    <script>
+        var gesamtkWhdata = {
+            labels: ['5' , '10', '15' , '20', '25', '30'],
+            datasets: [{
+                label: 'Gesamt (kWh)',
+                backgroundColor: '#ffffff',
+                borderColor: '#ffffff',
+                color: '#ffffff',
+                barThickness: 15,
+                maxBarThickness: 15,
+                data: [ 5, 18, 29, 39, 24, 14]
+            }]
+        };
+        var gesamtkWhconfig = {
+            type: 'line',
+            data: gesamtkWhdata,
+            options: {
+                color: [
+                    '#ffffff', 
+                ],
+                scales: {
+                    y: {
+                        ticks: {
+                            color : '#ffffff'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color : '#ffffff'
+                        }
+                    }
+                },
+            }
+        };
+        var gesamtkWh = new Chart(document.getElementById('gesamtkWh'), gesamtkWhconfig);
+    </script>
+
+</body>
+</html>
